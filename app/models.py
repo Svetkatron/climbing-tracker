@@ -13,6 +13,7 @@ class User(Base):
     height = Column(Float, nullable=True)
     weight = Column(Float, nullable=True)
     climbing_level = Column(String, default="intermediate")
+    avatar_url = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     workouts = relationship("Workout", back_populates="user", cascade="all, delete-orphan")

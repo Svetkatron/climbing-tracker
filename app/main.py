@@ -7,12 +7,14 @@ import shutil
 import uuid
 from app.database import engine, Base, get_db
 from app import models
-from app.routers import auth, routes, workouts, analytics
+from app.routers import auth, routes, workouts, analytics, users
 from app.auth import get_current_active_user 
 
-# Создаём папку для загрузок, если ее нет
+# Создаём папку для загрузок и аватара, если их нет
 UPLOAD_DIR = "uploads"
+AVATAR_DIR = "uploads/avatars"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(AVATAR_DIR, exist_ok=True)
 
 # Создаём папку для статики, если её нет
 STATIC_DIR = "static"
@@ -61,6 +63,7 @@ app.include_router(auth.router)
 app.include_router(routes.router)
 app.include_router(workouts.router)
 app.include_router(analytics.router)
+app.include_router(users.router)
 
 @app.get("/")
 def root():

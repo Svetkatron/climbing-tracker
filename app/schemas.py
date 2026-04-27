@@ -9,6 +9,7 @@ class UserBase(BaseModel):
     height: Optional[float] = None
     weight: Optional[float] = None
     climbing_level: str = "intermediate"
+    avatar_url: str | None = None
 
 class UserCreate(UserBase):
     password: str
@@ -17,6 +18,7 @@ class UserUpdate(BaseModel):
     height: Optional[float] = None
     weight: Optional[float] = None
     climbing_level: Optional[str] = None
+    avatar_url: str | None = None
 
 class UserResponse(UserBase):
     id: int
