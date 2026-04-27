@@ -109,3 +109,27 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+# ========== Analytics schemas ==========
+class GradeStat(BaseModel):
+    grade: str
+    total_attempts: int
+    successful_attempts: int
+    success_rate: float
+
+class ProgressStats(BaseModel):
+    total_workouts: int
+    total_attempts: int
+    success_rate: float
+    best_grade: str
+    improvement_rate: float
+    grade_breakdown: List[GradeStat]
+
+class RouteRecommendation(BaseModel):
+    route_id: int
+    name: str
+    grade: str
+    grade_value: float
+    difficulty_increase: float
+    success_rate_others: float
+    recommendation_score: float
