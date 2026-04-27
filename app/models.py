@@ -26,6 +26,7 @@ class Route(Base):
     grade_value = Column(Float, nullable=False)     # числовое значение для сортировки
     location = Column(String, nullable=True)
     route_type = Column(String, default="difficulty")  # "difficulty" или "boulder"
+    photo_url = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     workouts = relationship("Workout", back_populates="route")

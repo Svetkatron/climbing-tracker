@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
-from app import models, schemas, auth
+from app import models, schemas, auth 
 
 router = APIRouter(prefix="/routes", tags=["routes"])
 
-@router.get("/", response_model=List[schemas.RouteResponse])
+@router.get("/", response_model=List[schemas.RouteResponse]) # Не забыть добавить фото
 def get_routes(
     skip: int = 0,
     limit: int = 100,

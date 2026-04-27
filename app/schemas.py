@@ -30,18 +30,20 @@ class RouteBase(BaseModel):
     name: str
     grade: str
     grade_value: float
-    location: Optional[str] = None
-    route_type: str = "difficulty"  # "difficulty" или "boulder"
+    location: str | None = None
+    route_type: str = "difficulty"
+    photo_url: str | None = None  
 
 class RouteCreate(RouteBase):
     pass
 
 class RouteUpdate(BaseModel):
-    name: Optional[str] = None
-    grade: Optional[str] = None
-    grade_value: Optional[float] = None
-    location: Optional[str] = None
-    route_type: Optional[str] = None
+    name: str | None = None
+    grade: str | None = None
+    grade_value: float | None = None
+    location: str | None = None
+    route_type: str | None = None
+    photo_url: str | None = None 
 
 class RouteResponse(RouteBase):
     id: int
