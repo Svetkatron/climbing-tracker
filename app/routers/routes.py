@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
-from app import models, schemas, auth 
+from app import models, schemas, auth
+from app.notifications import notify_all_users_about_new_route
 
 router = APIRouter(prefix="/routes", tags=["routes"])
 
@@ -37,6 +38,15 @@ def create_route(
     db.add(db_route)
     db.commit()
     db.refresh(db_route)
+    
+    # Отправляем уведомления пользователям
+    notify_all_users_about_new_route(
+        db=db,
+        route_id=db_route.id,
+        route_name=db_route.name,
+        grade=db_route.grade
+    )
+    
     return db_route
 
 @router.put("/{route_id}", response_model=schemas.RouteResponse)
@@ -70,3 +80,5 @@ def delete_route(
     db.delete(route)
     db.commit()
     return None
+
+

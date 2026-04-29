@@ -15,6 +15,7 @@ class User(Base):
     climbing_level = Column(String, default="intermediate")
     avatar_url = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
     
     workouts = relationship("Workout", back_populates="user", cascade="all, delete-orphan")
 
@@ -46,3 +47,17 @@ class Workout(Base):
     
     user = relationship("User", back_populates="workouts")
     route = relationship("Route", back_populates="workouts")
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    route_id = Column(Integer, ForeignKey("routes.id"), nullable=True)
+    type = Column(String, nullable=False)  # "new_route"
+    message = Column(String, nullable=False)
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship("User", back_populates="notifications")
+    route = relationship("Route")

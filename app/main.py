@@ -7,8 +7,8 @@ import shutil
 import uuid
 from app.database import engine, Base, get_db
 from app import models
-from app.routers import auth, routes, workouts, analytics, users
-from app.auth import get_current_active_user 
+from app.routers import auth, routes, workouts, analytics, users, notifications
+from app.auth import get_current_active_user
 
 # Создаём папку для загрузок и аватара, если их нет
 UPLOAD_DIR = "uploads"
@@ -64,6 +64,7 @@ app.include_router(routes.router)
 app.include_router(workouts.router)
 app.include_router(analytics.router)
 app.include_router(users.router)
+app.include_router(notifications.router)
 
 @app.get("/")
 def root():

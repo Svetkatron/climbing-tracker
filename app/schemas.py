@@ -137,3 +137,24 @@ class RouteRecommendation(BaseModel):
     difficulty_increase: float
     success_rate_others: float
     recommendation_score: float
+
+# ========== Notification schemas ==========
+class NotificationBase(BaseModel):
+    type: str
+    message: str
+    route_id: int | None = None
+    is_read: bool = False
+
+class NotificationCreate(NotificationBase):
+    user_id: int
+
+class NotificationResponse(NotificationBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class NotificationMarkRead(BaseModel):
+    notification_id: int
