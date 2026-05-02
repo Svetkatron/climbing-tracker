@@ -149,6 +149,7 @@ def get_calendar(
             "attempts": workout.attempts,
             "success": workout.success,
             "notes": workout.notes
+            "is_competition": workout.is_competition
         })
     
     # Формируем результат

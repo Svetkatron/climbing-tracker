@@ -44,6 +44,7 @@ class Workout(Base):
     success = Column(Boolean, default=False)      # пройдена ли трасса
     notes = Column(Text, nullable=True)           # комментарий пользователя к этой тренировке
     created_at = Column(DateTime, default=datetime.utcnow)
+    is_competition = Column(Boolean, default=False) # по умолчанию тренировка
     
     user = relationship("User", back_populates="workouts")
     route = relationship("Route", back_populates="workouts")

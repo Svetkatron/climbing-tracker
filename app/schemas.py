@@ -61,6 +61,7 @@ class WorkoutBase(BaseModel):
     attempts: int = 1
     success: bool = False
     notes: Optional[str] = None
+    is_competition: bool = False
 
 class WorkoutCreate(WorkoutBase):
     pass
@@ -70,6 +71,7 @@ class WorkoutUpdate(BaseModel):
     success: Optional[bool] = None
     notes: Optional[str] = None
     date: Optional[datetime] = None
+    is_competition: bool | None = None
 
 class WorkoutResponse(WorkoutBase):
     id: int
