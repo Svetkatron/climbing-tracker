@@ -43,8 +43,9 @@ class Workout(Base):
     attempts = Column(Integer, default=1)          # количество попыток на этой тренировке
     success = Column(Boolean, default=False)      # пройдена ли трасса
     notes = Column(Text, nullable=True)           # комментарий пользователя к этой тренировке
-    created_at = Column(DateTime, default=datetime.utcnow)
     is_competition = Column(Boolean, default=False) # по умолчанию тренировка
+    reminder_sent = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
     
     user = relationship("User", back_populates="workouts")
     route = relationship("Route", back_populates="workouts")

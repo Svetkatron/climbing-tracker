@@ -73,6 +73,10 @@ def update_workout(
     if not workout:
         raise HTTPException(status_code=404, detail="Workout not found")
     
+    # Если изменилась дата, сбрасываем reminder_sent
+    if workout_update.date and workout_update.date != workout.date:
+        workout_update.reminder_sent = False
+    
     update_data = workout_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(workout, key, value)
@@ -148,7 +152,7 @@ def get_calendar(
             "grade": workout.route.grade if workout.route else "Unknown",
             "attempts": workout.attempts,
             "success": workout.success,
-            "notes": workout.notes
+            "notes": workout.notes,
             "is_competition": workout.is_competition
         })
     

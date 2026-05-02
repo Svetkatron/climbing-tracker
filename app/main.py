@@ -9,6 +9,7 @@ from app.database import engine, Base, get_db
 from app import models
 from app.routers import auth, routes, workouts, analytics, users, notifications
 from app.auth import get_current_active_user
+from app.reminder_service import start_reminder_service
 
 # Создаём папку для загрузок и аватара, если их нет
 UPLOAD_DIR = "uploads"
@@ -73,3 +74,8 @@ def root():
 @app.get("/health")
 def health_check(db: Session = Depends(get_db)):
     return {"status": "healthy", "database": "connected"}
+
+# Запускаем сервис напоминаний
+@app.on_event("startup")
+def startup_event():
+    start_reminder_service()

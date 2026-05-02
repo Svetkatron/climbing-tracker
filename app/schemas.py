@@ -62,6 +62,7 @@ class WorkoutBase(BaseModel):
     success: bool = False
     notes: Optional[str] = None
     is_competition: bool = False
+    reminder_sent: bool = False
 
 class WorkoutCreate(WorkoutBase):
     pass
@@ -72,6 +73,7 @@ class WorkoutUpdate(BaseModel):
     notes: Optional[str] = None
     date: Optional[datetime] = None
     is_competition: bool | None = None
+    reminder_sent: bool | None = None
 
 class WorkoutResponse(WorkoutBase):
     id: int
