@@ -6,34 +6,67 @@ from app.database import get_db
 from app import models, schemas, auth
 from datetime import datetime, timedelta
 from calendar import monthrange
+from fastapi.responses import StreamingResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+import io
 
 router = APIRouter(prefix="/workouts", tags=["workouts"])
 
-@router.get("/", response_model=List[schemas.WorkoutResponse])
-def get_workouts(
-    skip: int = 0,
-    limit: int = 100,
+@router.get("/export/excel")
+def export_workouts_excel(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_active_user)
 ):
+    """Экспорт тренировок в Excel файл"""
+    
+    # Получаем все тренировки пользователя
     workouts = db.query(models.Workout).filter(
         models.Workout.user_id == current_user.id
-    ).offset(skip).limit(limit).all()
-    return workouts
-
-@router.get("/{workout_id}", response_model=schemas.WorkoutResponse)
-def get_workout(
-    workout_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(auth.get_current_active_user)
-):
-    workout = db.query(models.Workout).filter(
-        models.Workout.id == workout_id,
-        models.Workout.user_id == current_user.id
-    ).first()
-    if not workout:
-        raise HTTPException(status_code=404, detail="Workout not found")
-    return workout
+    ).order_by(models.Workout.date.desc()).all()
+    
+    # Создаём Excel файл
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Мои тренировки"
+    
+    # Заголовки
+    headers = ["Дата", "Трасса", "Сложность", "Попытки", "Успех", "Заметки", "Соревнование"]
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="2c3e50", end_color="2c3e50", fill_type="solid")
+    
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal="center")
+    
+    # Заполняем данными
+    for row, workout in enumerate(workouts, 2):
+        ws.cell(row=row, column=1, value=workout.date.strftime("%d.%m.%Y %H:%M") if workout.date else "")
+        ws.cell(row=row, column=2, value=workout.route.name if workout.route else "Неизвестно")
+        ws.cell(row=row, column=3, value=workout.route.grade if workout.route else "")
+        ws.cell(row=row, column=4, value=workout.attempts)
+        ws.cell(row=row, column=5, value="✅ Да" if workout.success else "❌ Нет")
+        ws.cell(row=row, column=6, value=workout.notes or "")
+        ws.cell(row=row, column=7, value="🏆 Да" if workout.is_competition else "❌ Нет")
+    
+    # Настраиваем ширину колонок
+    column_widths = [20, 25, 12, 10, 10, 35, 12]
+    for i, width in enumerate(column_widths, 1):
+        ws.column_dimensions[chr(64 + i)].width = width
+    
+    # Сохраняем в буфер
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    
+    # Возвращаем файл
+    return StreamingResponse(
+        output,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename=trainings_{current_user.username}.xlsx"}
+    )
 
 @router.post("/", response_model=schemas.WorkoutResponse, status_code=status.HTTP_201_CREATED)
 def create_workout(
