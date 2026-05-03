@@ -1,0 +1,31 @@
+[MASTER]
+# Игнорируем папки
+ignore=venv, migrations, __pycache__, tests
+
+[MESSAGES CONTROL]
+# Отключаем слишком строгие проверки для учебного проекта
+disable=
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    R0903,  # too-few-public-methods
+    R0801,  # duplicate-code
+    W0622,  # redefined-builtin
+    C0103,  # invalid-name (можно оставить, но для учебного проекта отключаем)
+    W0703,  # too-broad-exception-catch
+    R0913,  # too-many-arguments
+    R0914,  # too-many-locals
+    R0902,  # too-many-instance-attributes
+    E1101,  # no-member (часто ложно срабатывает на SQLAlchemy)
+
+[REPORTS]
+# Выводим оценку
+score=yes
+
+[FORMAT]
+# Максимальная длина строки
+max-line-length=120
+
+[BASIC]
+# Разрешаем имена переменных длиной 1 символ
+good-names=i,j,k,ex,_,id,db,app,client
