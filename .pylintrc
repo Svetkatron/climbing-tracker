@@ -1,0 +1,24 @@
+[MASTER]
+ignore=venv, migrations, __pycache__, tests
+
+[MESSAGES CONTROL]
+disable=
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    C0103,  # invalid-name
+    C0301,  # line-too-long
+    C0303,  # trailing-whitespace
+    C0304,  # missing-final-newline
+    C0411,  # wrong-import-order
+    W0611,  # unused-import
+    W0613,  # unused-argument
+
+[REPORTS]
+score=yes
+
+[FORMAT]
+max-line-length=120
+
+[BASIC]
+good-names=i,j,k,ex,_,id,db,app,client
